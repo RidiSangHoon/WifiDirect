@@ -36,10 +36,6 @@ public class FileTransferService extends IntentService {
         super("FileTransferService");
     }
 
-    /*
-     * (non-Javadoc)
-     * @see android.app.IntentService#onHandleIntent(android.content.Intent)
-     */
     @Override
     protected void onHandleIntent(Intent intent) {
 
