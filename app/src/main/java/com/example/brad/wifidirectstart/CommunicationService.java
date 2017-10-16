@@ -20,27 +20,30 @@ import java.net.Socket;
  * A service that process each file transfer request i.e Intent by opening a
  * socket connection with the WiFi Direct Group Owner and writing the file
  */
-public class FileTransferService extends IntentService {
+public class CommunicationService extends IntentService {
 
     private static final int SOCKET_TIMEOUT = 5000;
-    public static final String ACTION_SEND_FILE = "com.example.android.wifidirect.SEND_FILE";
+    public static final String ACTION_SEND_MSG = "com.example.android.wifidirect.SEND_MSG";
+
     public static final String EXTRAS_FILE_PATH = "file_url";
     public static final String EXTRAS_GROUP_OWNER_ADDRESS = "go_host";
     public static final String EXTRAS_GROUP_OWNER_PORT = "go_port";
 
-    public FileTransferService(String name) {
+    public CommunicationService(String name) {
         super(name);
     }
 
-    public FileTransferService() {
-        super("FileTransferService");
+    public CommunicationService() {
+        super("CommunicationService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
         Context context = getApplicationContext();
-        if (intent.getAction().equals(ACTION_SEND_FILE)) {
+        if (intent.getAction().equals(ACTION_SEND_MSG)) {
+
+
             String fileUri = intent.getExtras().getString(EXTRAS_FILE_PATH);
             String host = intent.getExtras().getString(EXTRAS_GROUP_OWNER_ADDRESS);
             Socket socket = new Socket();
@@ -60,7 +63,6 @@ public class FileTransferService extends IntentService {
                 } catch (FileNotFoundException e) {
                     Log.d(WiFiDirectActivity.TAG, e.toString());
                 }
-                DeviceDetailFragment.copyFile(is, stream);
                 Log.d(WiFiDirectActivity.TAG, "Client: Data written");
             } catch (IOException e) {
                 Log.e(WiFiDirectActivity.TAG, e.getMessage());

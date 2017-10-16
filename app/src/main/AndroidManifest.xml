@@ -38,7 +38,7 @@
 
         <!-- Used for transferring files  after a successful connection -->
         <service
-            android:name=".FileTransferService"
+            android:name=".CommunicationService"
             android:enabled="true" />
 
         <activity android:name=".CommunicateActivity"></activity>
