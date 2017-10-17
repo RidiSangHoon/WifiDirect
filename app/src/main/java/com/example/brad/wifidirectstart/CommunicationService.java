@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -24,10 +25,13 @@ public class CommunicationService extends IntentService {
 
     private static final int SOCKET_TIMEOUT = 5000;
     public static final String ACTION_SEND_MSG = "com.example.android.wifidirect.SEND_MSG";
+    public static final String ACTION_TOAST = "com.example.android.wifidirect.TOAST";
 
     public static final String EXTRAS_FILE_PATH = "file_url";
     public static final String EXTRAS_GROUP_OWNER_ADDRESS = "go_host";
     public static final String EXTRAS_GROUP_OWNER_PORT = "go_port";
+
+    private PrintWriter communicationWriter;
 
     public CommunicationService(String name) {
         super(name);
@@ -79,6 +83,34 @@ public class CommunicationService extends IntentService {
                 }
             }
 
+        } else if (intent.getAction().equals(ACTION_TOAST)){
+            String host = intent.getExtras().getString(EXTRAS_GROUP_OWNER_ADDRESS);
+            Socket socket = new Socket();
+            int port = intent.getExtras().getInt(EXTRAS_GROUP_OWNER_PORT);
+
+            try{
+                Log.d(CommunicateActivity.TAG, "Opening client socket - ");
+                socket.bind(null);
+                socket.connect((new InetSocketAddress(host, port)), SOCKET_TIMEOUT);
+
+                Log.d(WiFiDirectActivity.TAG, "Client socket - " + socket.isConnected());
+                communicationWriter = new PrintWriter(socket.getOutputStream());
+                communicationWriter.println("토스트 메시지입니다.!!!");
+                communicationWriter.flush();
+
+            }catch(IOException e){
+                e.printStackTrace();
+            } finally {
+                if (socket!=null) {
+                    if(socket.isConnected()){
+                        try{
+                            socket.close();
+                        } catch(IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -42,7 +42,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
     private View mContentView = null;
     private WifiP2pDevice device;
-    private WifiP2pInfo info;
+    public static WifiP2pInfo info;
     ProgressDialog progressDialog = null;
 
     private int clientOrOwner = 0; // 0 이면 클라이언트 15이면 그룹 오너
@@ -136,9 +136,9 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
             intent.putExtra("owner",true);
             startActivity(intent);
         } else if (info.groupFormed) {
-            mContentView.findViewById(R.id.btn_start_client).setVisibility(View.VISIBLE);
-            ((TextView) mContentView.findViewById(R.id.status_text)).setText(getResources()
-                    .getString(R.string.client_text));
+            Intent intent = new Intent(getActivity(),CommunicateActivity.class);
+            intent.putExtra("owner",false);
+            startActivity(intent);
         }
         mContentView.findViewById(R.id.btn_connect).setVisibility(View.GONE);
     }
@@ -171,7 +171,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         view.setText(R.string.empty);
         view = (TextView) mContentView.findViewById(R.id.status_text);
         view.setText(R.string.empty);
-        mContentView.findViewById(R.id.btn_start_client).setVisibility(View.GONE);
+        mContentView.findViewById(R.id.btn_start_communicate).setVisibility(View.GONE);
         this.getView().setVisibility(View.GONE);
     }
 }
