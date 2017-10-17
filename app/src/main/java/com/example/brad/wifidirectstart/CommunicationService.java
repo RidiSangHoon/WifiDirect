@@ -76,7 +76,6 @@ public class CommunicationService extends IntentService {
                         try {
                             socket.close();
                         } catch (IOException e) {
-                            // Give up
                             e.printStackTrace();
                         }
                     }

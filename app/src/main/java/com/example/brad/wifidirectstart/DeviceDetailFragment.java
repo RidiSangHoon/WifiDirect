@@ -34,10 +34,6 @@ import android.widget.TextView;
 
 import com.example.brad.wifidirectstart.DeviceListFragment.DeviceActionListener;
 
-/**
- * A fragment that manages a particular peer and allows interaction with device
- * i.e. setting up network connection and transferring data.
- */
 public class DeviceDetailFragment extends Fragment implements ConnectionInfoListener {
 
     private View mContentView = null;
@@ -97,23 +93,6 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
         return mContentView;
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//
-//        // 클라이언트에서 갤러리 선택 후 실행
-//        Uri uri = data.getData();
-//        TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
-//        statusText.setText("Sending: " + uri);
-//        Log.d(WiFiDirectActivity.TAG, "Intent----------- " + uri);
-//        Intent serviceIntent = new Intent(getActivity(), CommunicationService.class);
-//        serviceIntent.setAction(CommunicationService.ACTION_SEND_MSG);
-//        serviceIntent.putExtra(CommunicationService.EXTRAS_FILE_PATH, uri.toString());
-//        serviceIntent.putExtra(CommunicationService.EXTRAS_GROUP_OWNER_ADDRESS,
-//                info.groupOwnerAddress.getHostAddress());
-//        serviceIntent.putExtra(CommunicationService.EXTRAS_GROUP_OWNER_PORT, 8988);
-//        getActivity().startService(serviceIntent);
-//    }
 
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {

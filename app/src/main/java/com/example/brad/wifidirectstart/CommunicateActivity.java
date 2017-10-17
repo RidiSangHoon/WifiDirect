@@ -1,12 +1,9 @@
 package com.example.brad.wifidirectstart;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -33,6 +29,7 @@ public class CommunicateActivity extends Activity {
     private TextView showText;
     private LinearLayout clientRel, ownerRel;
     private PrintWriter socketWriter;
+    private ServerThread serverThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +44,7 @@ public class CommunicateActivity extends Activity {
             //그룹 오너
             Log.e("CommunicateActivity","Group Owner");
             showText = (TextView)findViewById(R.id.showText);
-            new ServerAsyncTask(CommunicateActivity.this,showText).execute();
-
+            new ServerThread().start();
             ownerRel.setVisibility(View.VISIBLE);
             clientRel.setVisibility(View.GONE);
         } else {
@@ -64,61 +60,48 @@ public class CommunicateActivity extends Activity {
             toastBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent serviceIntent = new Intent(CommunicateActivity.this, CommunicationService.class);
-                    serviceIntent.setAction(CommunicationService.ACTION_TOAST);
+                    final Intent serviceIntent = new Intent(CommunicateActivity.this, CommunicationService.class);
                     serviceIntent.putExtra(CommunicationService.EXTRAS_GROUP_OWNER_ADDRESS,
                             info.groupOwnerAddress.getHostAddress());
                     serviceIntent.putExtra(CommunicationService.EXTRAS_GROUP_OWNER_PORT, 8988);
+                    serviceIntent.setAction(CommunicationService.ACTION_TOAST);
                     getApplicationContext().startService(serviceIntent);
                 }
             });
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        serverThread.interrupt();
+    }
 
-    public class ServerAsyncTask extends AsyncTask<Void, Void, String> {
-
-        private Context context;
-        private TextView statusText;
-
-        /**
-         * @param context
-         * @param statusText
-         */
-        public ServerAsyncTask(Context context, View statusText) {
-            this.context = context;
-            this.statusText = (TextView) statusText;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
+    public class ServerThread extends Thread {
+        public void run() {
+            try{
                 ServerSocket serverSocket = new ServerSocket(8988);
                 Log.d(CommunicateActivity.TAG, "Server: Socket opened");
-                Socket client = serverSocket.accept();
-                Log.d(CommunicateActivity.TAG, "Server: connection done");
-                BufferedReader inputReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                Log.e("CommunicateActivity",inputReader.readLine());
-                final String printString = inputReader.readLine();
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(CommunicateActivity.this, printString,
-                                Toast.LENGTH_SHORT).show();
+                for(;;) {
+                    Thread.sleep(1000);
+                    Socket client = serverSocket.accept();
+                    Log.d(CommunicateActivity.TAG, "Server: connection done");
+                    BufferedReader inputReader =
+                            new BufferedReader(new InputStreamReader(client.getInputStream()));
+                    final String toastMsg = inputReader.readLine();
+                    if(toastMsg != null) {
+                        new Handler(getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(CommunicateActivity.this, toastMsg,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-                });
-                return "";
-            } catch (IOException e) {
+                }
+            } catch (Exception e) {
                 Log.e(CommunicateActivity.TAG, e.getMessage());
-                return null;
             }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result != null) {
-            }
-
         }
     }
 }
