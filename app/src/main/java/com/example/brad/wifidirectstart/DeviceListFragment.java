@@ -55,16 +55,10 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         mContentView = inflater.inflate(R.layout.device_list, null);
         return mContentView;
-    }
-
-    /**
-     * @return this device
-     */
-    public WifiP2pDevice getDevice() {
-        return device;
     }
 
     private static String getDeviceStatus(int deviceStatus) {
@@ -102,13 +96,8 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
 
         private List<WifiP2pDevice> items;
 
-        /**
-         * @param context
-         * @param textViewResourceId
-         * @param objects
-         */
         public WiFiPeerListAdapter(Context context, int textViewResourceId,
-                List<WifiP2pDevice> objects) {
+                                   List<WifiP2pDevice> objects) {
             super(context, textViewResourceId, objects);
             items = objects;
 
@@ -141,7 +130,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
 
     /**
      * Update UI for this device.
-     * 
+     *
      * @param device WifiP2pDevice object
      */
     public void updateThisDevice(WifiP2pDevice device) {
@@ -172,21 +161,19 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
     }
 
-    /**
-     * 
-     */
     public void onInitiateDiscovery() {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-        progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel", "finding peers", true,
-                true, new DialogInterface.OnCancelListener() {
+        progressDialog =
+                ProgressDialog.show(getActivity(), "Press back to cancel", "finding peers", true,
+                        true, new DialogInterface.OnCancelListener() {
 
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        
-                    }
-                });
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+
+                            }
+                        });
     }
 
     /**
@@ -194,14 +181,10 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
      * events.
      */
     public interface DeviceActionListener {
-
         void showDetails(WifiP2pDevice device);
-
-        void cancelDisconnect();
 
         void connect(WifiP2pConfig config);
 
         void disconnect();
     }
-
 }

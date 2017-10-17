@@ -7,41 +7,47 @@
     tools:context="com.example.brad.wifidirectstart.CommunicateActivity">
 
     <LinearLayout
+        android:id="@+id/clientRel"
         android:layout_width="368dp"
         android:layout_height="503dp"
-        android:id="@+id/clientRel"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/inputText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="전달할 메시지를 입력하세요." />
+
+        <Button
+            android:id="@+id/sendBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="메시지 전달 버튼" />
+
         <Button
             android:id="@+id/toastBtn"
-            android:text="기본적 토스트 Btn"
-            android:layout_marginBottom="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="전달할 메시지를 입력하세요."
-            android:id="@+id/inputText"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="메시지 전달 버튼"
-            android:id="@+id/sendBtn"/>
+            android:layout_marginTop="10dp"
+            android:text="토스트 버튼" />
 
     </LinearLayout>
+
     <LinearLayout
+        android:id="@+id/ownerRel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/ownerRel"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
+
         <TextView
+            android:id="@+id/showText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/white"
             android:gravity="center"
-            android:id="@+id/showText"/>
+            android:text=""
+            android:textColor="@color/white" />
     </LinearLayout>
 </RelativeLayout>

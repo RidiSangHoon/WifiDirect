@@ -17,7 +17,6 @@
 package com.example.brad.wifidirectstart;
 
 
-
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -49,7 +48,8 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
         mContentView = inflater.inflate(R.layout.device_detail, null);
         mContentView.findViewById(R.id.btn_connect).setOnClickListener(new View.OnClickListener() {
@@ -85,8 +85,9 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
                     @Override
                     public void onClick(View v) {
-                        Intent activityIntent = new Intent(getActivity(),CommunicateActivity.class);
-                        activityIntent.putExtra("owner",false);
+                        Intent activityIntent =
+                                new Intent(getActivity(), CommunicateActivity.class);
+                        activityIntent.putExtra("owner", false);
                         startActivity(activityIntent);
                     }
                 });
@@ -105,18 +106,18 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         TextView view = (TextView) mContentView.findViewById(R.id.group_owner);
         view.setText(getResources().getString(R.string.group_owner_text)
                 + ((info.isGroupOwner == true) ? getResources().getString(R.string.yes)
-                        : getResources().getString(R.string.no)));
+                : getResources().getString(R.string.no)));
 
         view = (TextView) mContentView.findViewById(R.id.device_info);
         view.setText("Group Owner IP - " + info.groupOwnerAddress.getHostAddress());
 
         if (info.groupFormed && info.isGroupOwner) {
-            Intent intent = new Intent(getActivity(),CommunicateActivity.class);
-            intent.putExtra("owner",true);
+            Intent intent = new Intent(getActivity(), CommunicateActivity.class);
+            intent.putExtra("owner", true);
             startActivity(intent);
         } else if (info.groupFormed) {
-            Intent intent = new Intent(getActivity(),CommunicateActivity.class);
-            intent.putExtra("owner",false);
+            Intent intent = new Intent(getActivity(), CommunicateActivity.class);
+            intent.putExtra("owner", false);
             startActivity(intent);
         }
         mContentView.findViewById(R.id.btn_connect).setVisibility(View.GONE);
@@ -124,7 +125,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
     /**
      * Updates the UI with device data
-     * 
+     *
      * @param device the device to be displayed
      */
     public void showDetails(WifiP2pDevice device) {
